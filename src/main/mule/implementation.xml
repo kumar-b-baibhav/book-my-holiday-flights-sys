@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<flow name="getFlightsInfo" doc:id="79de673f-e875-43c3-9565-45d3bad3601d" >
+		<logger level="INFO" doc:name="Logger" doc:id="43ffe006-bd9c-4902-ab0a-cb2c5c35a606" message='#["Making request for flight details"]'/>
+		<choice doc:name="Flight Partner Choice" doc:id="9df3e3b8-6187-4440-91f3-c80f087d42b5" >
+			<when expression='#[upper(attributes.queryParams.flightName) == "INDIGO"]'>
+				<http:request method="GET" doc:name="Request to indigo-mock" doc:id="a7a80dbb-d5b8-4e98-bd07-00a3566cf879" config-ref="HTTP_Request_configuration" path="/indigo-mock" target="flightsResponse" />
+				<ee:transform doc:name="Transform Message" doc:id="2d1fa28b-b765-4a5a-8ef4-e8c6f365c527">
+			<ee:message>
+				<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+var response = vars.flightsResponse
+var origin = upper(attributes.queryParams.source) default ""
+var destination = upper(attributes.queryParams.destination) default ""
+var day = upper(attributes.queryParams.day) default ""
+---
+flights:
+response filter ((flight, index) -> (
+		upper(flight.origin) == origin
+		and
+		upper(flight.destination) == destination
+		and
+		if (flight.departureDay contains day)
+			true
+		else
+		    false
+		
+	)
+)]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+			</when>
+			<otherwise>
+				<set-payload value='#["Flight partner not tied up"]' doc:name="Set Payload" doc:id="4c6cc4e3-3636-4336-af9d-a62cca7ac348" />
+			</otherwise>
+		</choice>
+		<logger level="INFO" doc:name="Logger" doc:id="4f679b1f-9bcc-4ac1-8f24-eb0f4624740d" message='#["Flights request processing done"]'/>
+	</flow>
+	<flow name="bookFlight" doc:id="088154ae-7e91-45b8-9e3f-dfd441b805ab" >
+		<logger level="INFO" doc:name="Logger" doc:id="ca31cb88-211c-4bf9-baee-2ed768ed6d3f" />
+		<http:request method="POST" doc:name="Request" doc:id="33df40e0-490d-4a7d-8bc6-b97e9b208870" config-ref="HTTP_Request_configuration" path='#["/indigo-mock/" ++ attributes.uriParams.id]'/>
+	</flow>
+	<flow name="getFlightInfoByID" doc:id="b426586b-7cbe-48bf-8097-5b0bd4cc4ecf" >
+		<set-variable value="#[attributes.uriParams.id]" doc:name="Set Variable" doc:id="135a859d-a01e-4c30-acc5-25cada5bbb06" variableName="flightID"/>
+		<choice doc:name="Choice" doc:id="596b4685-3f9d-4593-a576-a5099310fbe8" >
+			<when expression='upper(attributes.queryParams.flightName) == "INDIGO"'>
+				<http:request method="GET" doc:name="Request" doc:id="d0fcce85-93d5-4f00-ba33-47130b796a07" config-ref="HTTP_Request_configuration" path="/indigo-mock"/>
+				<ee:transform doc:name="Transform Message" doc:id="eaf85a45-fc3c-47bd-a611-6c63085eb8bd" >
+					<ee:message >
+						<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+var flightID = vars.flightID as String default "2"
+---
+(payload filter ((object, index) ->(
+	object.ID as String == flightID
+)))[0]
+]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+			</when>
+			<otherwise >
+				<set-payload value="#[payload]" doc:name="Set Payload" doc:id="ea7e1735-0a6e-4d9b-8a12-a1562f2c4a0a" />
+			</otherwise>
+		</choice>
+		<logger level="INFO" doc:name="Logger" doc:id="05b0f2f6-7318-4f7e-a10a-d26a84ee720e" />
+	</flow>
+</mule>

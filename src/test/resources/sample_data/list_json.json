@@ -1,0 +1,179 @@
+[
+  {
+    "ID": 1,
+    "price": 541,
+    "departureDay": [
+      "MON",
+      "WED",
+      "FRI"
+    ],
+    "departureTime": "00:00",
+    "origin": "KOL",
+    "destination": "MUM",
+    "plane": {
+      "type": "Boeing 787",
+      "totalSeats": 200
+    },
+    "emptySeats": 0
+  },
+  {
+    "ID": 2,
+    "price": 300,
+    "departureDay": [
+      "SUN",
+      "SAT"
+    ],
+    "departureTime": "00:00",
+    "origin": "KOL",
+    "destination": "BAN",
+    "plane": {
+      "type": "Boeing 747",
+      "totalSeats": 345
+    },
+    "emptySeats": 1
+  },
+  {
+    "ID": 3,
+    "price": 300,
+    "departureDay": [
+      "MON",
+      "FRI"
+    ],
+    "departureTime": "00:00",
+    "origin": "KOL",
+    "destination": "MUM",
+    "plane": {
+      "type": "Boeing 777",
+      "totalSeats": 300
+    },
+    "emptySeats": 0
+  },
+  {
+    "ID": 4,
+    "price": 200,
+    "departureDay": [
+      "WED"
+    ],
+    "departureTime": "00:00",
+    "origin": "KOL",
+    "destination": "BAN",
+    "plane": {
+      "type": "Boeing 737",
+      "totalSeats": 150
+    },
+    "emptySeats": 1
+  },
+  {
+    "ID": 5,
+    "price": 142,
+    "departureDay": [
+      "WED",
+      "FRI"
+    ],
+    "departureTime": "00:00",
+    "origin": "KOL",
+    "destination": "DEL",
+    "plane": {
+      "type": "Boeing 737",
+      "totalSeats": 150
+    },
+    "emptySeats": 1
+  },
+  {
+    "ID": 6,
+    "price": 954,
+    "departureDay": [
+      "MON",
+      "WED",
+      "FRI"
+    ],
+    "departureTime": "00:00",
+    "origin": "KOL",
+    "destination": "BAN",
+    "plane": {
+      "type": "Boeing 787",
+      "totalSeats": 200
+    },
+    "emptySeats": 100
+  },
+  {
+    "ID": 7,
+    "price": 676,
+    "departureDay": [
+      "MON",
+      "FRI"
+    ],
+    "departureTime": "00:00",
+    "origin": "KOL",
+    "destination": "DEL",
+    "plane": {
+      "type": "Boeing 777",
+      "totalSeats": 300
+    },
+    "emptySeats": 0
+  },
+  {
+    "ID": 8,
+    "price": 300,
+    "departureDay": [
+      "MON",
+      "FRI"
+    ],
+    "departureTime": "00:00",
+    "origin": "KOL",
+    "destination": "DEL",
+    "plane": {
+      "type": "Boeing 737",
+      "totalSeats": 150
+    },
+    "emptySeats": 9
+  },
+  {
+    "ID": 9,
+    "price": 900,
+    "departureDay": [
+      "MON",
+      "FRI"
+    ],
+    "departureTime": "00:00",
+    "origin": "KOL",
+    "destination": "DEL",
+    "plane": {
+      "type": "Boeing 737",
+      "totalSeats": 150
+    },
+    "emptySeats": 0
+  },
+  {
+    "ID": 10,
+    "price": 900,
+    "departureDay": [
+      "SUN",
+      "SAT"
+    ],
+    "departureTime": "00:00",
+    "origin": "KOL",
+    "destination": "MUM",
+    "plane": {
+      "type": "Boeing 777",
+      "totalSeats": 300
+    },
+    "emptySeats": 100
+  },
+  {
+    "ID": 11,
+    "price": 456,
+    "departureDay": [
+      "SUN",
+      "SAT"
+    ],
+    "departureTime": "00:00",
+    "origin": "KOL",
+    "destination": "DEL",
+    "plane": {
+      "type": "Boeing 737",
+      "totalSeats": 150
+    },
+    "emptySeats": 100
+  }
+]

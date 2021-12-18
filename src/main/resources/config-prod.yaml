@@ -1,0 +1,6 @@
+http:
+  flights:
+    host: "indigo-mock-web-service.us-e2.cloudhub.io"
+    port: ""
+    baseApi: "/api"
+  port: "8082"  

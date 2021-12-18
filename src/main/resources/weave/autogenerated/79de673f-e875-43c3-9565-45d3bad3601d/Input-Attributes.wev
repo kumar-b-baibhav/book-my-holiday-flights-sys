@@ -1,0 +1,28 @@
+%dw 2.0
+
+type auto_79de673f_e875_43c3_9565_45d3bad3601d_Input_Attributes = {|
+  clientCertificate?: {|
+    publicKey?: {|  |}, 
+    "type"?: String, 
+    encoded?: Binary
+  |}, 
+  headers: {|  |}, 
+  listenerPath: String, 
+  method: String, 
+  queryParams: {|
+    flightName: String, 
+    source: "PAT" | "MUM" | "KOL" | "DEL" | "LUC" | "RAN" | "BAN", 
+    destination: "PAT" | "MUM" | "KOL" | "DEL" | "LUC" | "RAN" | "BAN", 
+    day: String
+  |}, 
+  queryString: String, 
+  relativePath: String, 
+  remoteAddress: String, 
+  requestPath: String, 
+  requestUri: String, 
+  scheme: String, 
+  uriParams: {|  |}, 
+  version: String, 
+  localAddress: String
+|}
+
