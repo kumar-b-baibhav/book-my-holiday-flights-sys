@@ -64,17 +64,17 @@
 			<classifier>mule-plugin</classifier>
 		</dependency>
 		<dependency>
-			<groupId>099e432b-af34-4100-a9b0-e16b6abb52e1</groupId>
-			<artifactId>book-my-holiday-flights-sys-api</artifactId>
-			<version>1.0.4</version>
-			<classifier>raml</classifier>
-			<type>zip</type>
-		</dependency>
-		<dependency>
 			<groupId>org.mule.modules</groupId>
 			<artifactId>mule-apikit-module</artifactId>
 			<version>1.5.7</version>
 			<classifier>mule-plugin</classifier>
+		</dependency>
+		<dependency>
+			<groupId>099e432b-af34-4100-a9b0-e16b6abb52e1</groupId>
+			<artifactId>book-my-holiday-flights-sys-api</artifactId>
+			<version>1.0.7</version>
+			<classifier>raml</classifier>
+			<type>zip</type>
 		</dependency>
 	</dependencies>
 

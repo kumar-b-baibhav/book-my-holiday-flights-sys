@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<mule xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd ">
-    <apikit:config name="book-my-holiday-flights-sys-api-config" api="resource::099e432b-af34-4100-a9b0-e16b6abb52e1:book-my-holiday-flights-sys-api:1.0.4:raml:zip:book-my-holiday-flights-sys-api.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" />
+<mule xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd ">
+    <apikit:config name="book-my-holiday-flights-sys-api-config" api="resource::099e432b-af34-4100-a9b0-e16b6abb52e1:book-my-holiday-flights-sys-api:1.0.7:raml:zip:book-my-holiday-flights-sys-api.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" />
     <flow name="book-my-holiday-flights-sys-api-main">
         <http:listener config-ref="HTTP_Listener_config" path="/api/*">
             <http:response statusCode="#[vars.httpStatus default 200]">
@@ -121,12 +121,12 @@ output application/json
         </error-handler>
     </flow>
     <flow name="get:\flights:book-my-holiday-flights-sys-api-config">
-		<flow-ref doc:name="getFlightsInfo" doc:id="65c5fa90-f42d-4caf-bc70-3aea2053e469" name="getFlightsInfo"/>
+        <flow-ref doc:name="getFlightsInfo" doc:id="65c5fa90-f42d-4caf-bc70-3aea2053e469" name="getFlightsInfo" />
     </flow>
     <flow name="get:\flights\(id):book-my-holiday-flights-sys-api-config">
-		<flow-ref doc:name="getFlightInfoByID" doc:id="076b471d-d395-4f25-a4fb-cbf6f582ddd9" name="getFlightInfoByID"/>
+        <flow-ref doc:name="getFlightInfoByID" doc:id="076b471d-d395-4f25-a4fb-cbf6f582ddd9" name="getFlightInfoByID" />
     </flow>
-    <flow name="post:\flights\book\(id):application\json:book-my-holiday-flights-sys-api-config">
-		<flow-ref doc:name="bookFlight" doc:id="840346ab-c3ff-4b51-905c-39fd90172dac" name="bookFlight"/>
+    <flow name="post:\flights\book:application\json:book-my-holiday-flights-sys-api-config">
+        <flow-ref doc:name="bookFlight" doc:id="840346ab-c3ff-4b51-905c-39fd90172dac" name="bookFlight" />
     </flow>
 </mule>

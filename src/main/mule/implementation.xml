@@ -9,6 +9,7 @@ http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/
 		<logger level="INFO" doc:name="Logger" doc:id="43ffe006-bd9c-4902-ab0a-cb2c5c35a606" message='#["Making request for flight details"]'/>
 		<choice doc:name="Flight Partner Choice" doc:id="9df3e3b8-6187-4440-91f3-c80f087d42b5" >
 			<when expression='#[upper(attributes.queryParams.flightName) == "INDIGO"]'>
+				<logger level="INFO" doc:name="Logger" doc:id="7706033d-97d2-428c-93bf-6363f2749cf4" />
 				<http:request method="GET" doc:name="Request to indigo-mock" doc:id="a7a80dbb-d5b8-4e98-bd07-00a3566cf879" config-ref="HTTP_Request_configuration" path="/indigo-mock" target="flightsResponse" />
 				<ee:transform doc:name="Transform Message" doc:id="2d1fa28b-b765-4a5a-8ef4-e8c6f365c527">
 			<ee:message>
@@ -43,7 +44,7 @@ response filter ((flight, index) -> (
 	</flow>
 	<flow name="bookFlight" doc:id="088154ae-7e91-45b8-9e3f-dfd441b805ab" >
 		<logger level="INFO" doc:name="Logger" doc:id="ca31cb88-211c-4bf9-baee-2ed768ed6d3f" />
-		<http:request method="POST" doc:name="Request" doc:id="33df40e0-490d-4a7d-8bc6-b97e9b208870" config-ref="HTTP_Request_configuration" path='#["/indigo-mock/" ++ attributes.uriParams.id]'/>
+		<http:request method="POST" doc:name="Request" doc:id="33df40e0-490d-4a7d-8bc6-b97e9b208870" config-ref="HTTP_Request_configuration" path='/indigo-mock'/>
 	</flow>
 	<flow name="getFlightInfoByID" doc:id="b426586b-7cbe-48bf-8097-5b0bd4cc4ecf" >
 		<set-variable value="#[attributes.uriParams.id]" doc:name="Set Variable" doc:id="135a859d-a01e-4c30-acc5-25cada5bbb06" variableName="flightID"/>
