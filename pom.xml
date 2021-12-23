@@ -72,7 +72,7 @@
 		<dependency>
 			<groupId>099e432b-af34-4100-a9b0-e16b6abb52e1</groupId>
 			<artifactId>book-my-holiday-flights-sys-api</artifactId>
-			<version>1.0.7</version>
+			<version>1.0.9</version>
 			<classifier>raml</classifier>
 			<type>zip</type>
 		</dependency>

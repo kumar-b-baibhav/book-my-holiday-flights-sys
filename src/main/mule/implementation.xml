@@ -6,12 +6,14 @@
 http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
 http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
 	<flow name="getFlightsInfo" doc:id="79de673f-e875-43c3-9565-45d3bad3601d" >
-		<logger level="INFO" doc:name="Logger" doc:id="43ffe006-bd9c-4902-ab0a-cb2c5c35a606" message='#["Making request for flight details"]'/>
+		<set-variable value="#[attributes.headers.correlationID default uuid()]" doc:name="correlationID" doc:id="e0bec1a3-f050-4d20-b52d-6d7e5d18a7dd" variableName="correlationID"/>
+		<logger level="INFO" doc:name="Logger" doc:id="43ffe006-bd9c-4902-ab0a-cb2c5c35a606" message='#["Making request for flight details for correlationID: " ++ vars.correlationID as String]'/>
 		<choice doc:name="Flight Partner Choice" doc:id="9df3e3b8-6187-4440-91f3-c80f087d42b5" >
 			<when expression='#[upper(attributes.queryParams.flightName) == "INDIGO"]'>
-				<logger level="INFO" doc:name="Logger" doc:id="7706033d-97d2-428c-93bf-6363f2749cf4" />
-				<http:request method="GET" doc:name="Request to indigo-mock" doc:id="a7a80dbb-d5b8-4e98-bd07-00a3566cf879" config-ref="HTTP_Request_configuration" path="/indigo-mock" target="flightsResponse" />
-				<ee:transform doc:name="Transform Message" doc:id="2d1fa28b-b765-4a5a-8ef4-e8c6f365c527">
+				<http:request method="GET" doc:name="GET/indigo-mock" doc:id="a7a80dbb-d5b8-4e98-bd07-00a3566cf879" config-ref="HTTP_Request_configuration" path="/indigo-mock" target="flightsResponse" >
+					<error-mapping targetType="FLIGHTS:BAD_REQUEST" />
+				</http:request>
+				<ee:transform doc:name="Filter data" doc:id="2d1fa28b-b765-4a5a-8ef4-e8c6f365c527">
 			<ee:message>
 				<ee:set-payload><![CDATA[%dw 2.0
 output application/json
@@ -35,23 +37,32 @@ response filter ((flight, index) -> (
 )]]></ee:set-payload>
 			</ee:message>
 		</ee:transform>
+				<logger level="DEBUG" doc:name="payload[DEBUG]" doc:id="5b2c6291-ab48-422f-9ad4-b850728cea22" message='#[payload ++ {"correaltionID": vars.correlationID}]'/>
 			</when>
 			<otherwise>
-				<set-payload value='#["Flight partner not tied up"]' doc:name="Set Payload" doc:id="4c6cc4e3-3636-4336-af9d-a62cca7ac348" />
+				<raise-error doc:name="Raise error" doc:id="041f12af-c248-47d0-a501-c97a18eff073" type="FLIGHTS:NOT_AVAILABLE" description="Flights not available for this partner"/>
 			</otherwise>
 		</choice>
-		<logger level="INFO" doc:name="Logger" doc:id="4f679b1f-9bcc-4ac1-8f24-eb0f4624740d" message='#["Flights request processing done"]'/>
+		<logger level="INFO" doc:name="Logger" doc:id="4f679b1f-9bcc-4ac1-8f24-eb0f4624740d" message='#["Flights request processing done for correlation ID: " ++ vars.correlationID]'/>
 	</flow>
 	<flow name="bookFlight" doc:id="088154ae-7e91-45b8-9e3f-dfd441b805ab" >
-		<logger level="INFO" doc:name="Logger" doc:id="ca31cb88-211c-4bf9-baee-2ed768ed6d3f" />
-		<http:request method="POST" doc:name="Request" doc:id="33df40e0-490d-4a7d-8bc6-b97e9b208870" config-ref="HTTP_Request_configuration" path='/indigo-mock'/>
+		<set-variable value="#[attributes.headers.correlationID default uuid()]" doc:name="correlationID" doc:id="ea607f6d-9777-4788-ab86-12c866cfe7b9" variableName="correlationID" />
+		<logger level="INFO" doc:name="Logger" doc:id="ca31cb88-211c-4bf9-baee-2ed768ed6d3f" message='#["Making post request to flights api for correltionID: " ++ vars.correlationID]'/>
+		<http:request method="POST" doc:name="POST/indigo-mock" doc:id="33df40e0-490d-4a7d-8bc6-b97e9b208870" config-ref="HTTP_Request_configuration" path='/indigo-mock'>
+			<error-mapping targetType="FLIGHTS:BAD_REQUEST" />
+		</http:request>
+		<logger level="DEBUG" doc:name="payload[DEBUG]" doc:id="581988bb-857d-4942-86d6-92649b580953" message="#[payload]"/>
 	</flow>
 	<flow name="getFlightInfoByID" doc:id="b426586b-7cbe-48bf-8097-5b0bd4cc4ecf" >
-		<set-variable value="#[attributes.uriParams.id]" doc:name="Set Variable" doc:id="135a859d-a01e-4c30-acc5-25cada5bbb06" variableName="flightID"/>
+		<set-variable value="#[attributes.headers.correlationID default uuid()]" doc:name="correlationID" doc:id="5e4f1587-2112-4cab-b970-9e7e19c9d378" variableName="correlationID" />
+		<set-variable value="#[attributes.uriParams.id]" doc:name="flightID" doc:id="135a859d-a01e-4c30-acc5-25cada5bbb06" variableName="flightID"/>
+		<logger level="INFO" doc:name="flightID" doc:id="a17f1f41-c473-4d63-8e8b-7d1732721781" message='#["Fetching flight having id:" ++ vars.flightID ++ " for correlationID: " ++ vars.correlationID]'/>
 		<choice doc:name="Choice" doc:id="596b4685-3f9d-4593-a576-a5099310fbe8" >
 			<when expression='upper(attributes.queryParams.flightName) == "INDIGO"'>
-				<http:request method="GET" doc:name="Request" doc:id="d0fcce85-93d5-4f00-ba33-47130b796a07" config-ref="HTTP_Request_configuration" path="/indigo-mock"/>
-				<ee:transform doc:name="Transform Message" doc:id="eaf85a45-fc3c-47bd-a611-6c63085eb8bd" >
+				<http:request method="GET" doc:name="GET/indigo-mock" doc:id="d0fcce85-93d5-4f00-ba33-47130b796a07" config-ref="HTTP_Request_configuration" path="/indigo-mock">
+					<error-mapping targetType="FLIGHTS:BAD_REQUEST" />
+				</http:request>
+				<ee:transform doc:name="FIlter data on ID" doc:id="eaf85a45-fc3c-47bd-a611-6c63085eb8bd" >
 					<ee:message >
 						<ee:set-payload ><![CDATA[%dw 2.0
 output application/json
@@ -63,11 +74,12 @@ var flightID = vars.flightID as String default "2"
 ]]></ee:set-payload>
 					</ee:message>
 				</ee:transform>
+				<logger level="DEBUG" doc:name="payload[DEBUG}" doc:id="ef2e2569-63eb-412e-aaa9-2fb61cf92252" message='#[payload ++ {"correaltionID": vars.correlationID}]' />
 			</when>
 			<otherwise >
-				<set-payload value="#[payload]" doc:name="Set Payload" doc:id="ea7e1735-0a6e-4d9b-8a12-a1562f2c4a0a" />
+				<raise-error doc:name="Raise error" doc:id="0bed751c-7827-409e-8c87-7a2224590515" type="FLIGHTS:NOT_AVAILABLE" description="Flights not available for this partner"/>
 			</otherwise>
 		</choice>
-		<logger level="INFO" doc:name="Logger" doc:id="05b0f2f6-7318-4f7e-a10a-d26a84ee720e" />
+		<logger level="INFO" doc:name="Logger" doc:id="05b0f2f6-7318-4f7e-a10a-d26a84ee720e" message='#["Flight fetching complete for correlationID: " ++ vars.correlationID]'/>
 	</flow>
 </mule>
